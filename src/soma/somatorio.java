@@ -17,17 +17,19 @@ class somatorio implements Runnable {
         this.semaphore = semaphore;
     }
 
-    //início da região crítica
+
     public void run() {
-        try {
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         for (int i = 0; i < upper; i++) {
+            try {
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //início da região crítica
             ValorSoma.setValue(ValorSoma.getValue() + 1);
+            //fim da região crítica
+            semaphore.release();
         }
-        semaphore.release();
     }
-    //fim da região crítica
 }
